@@ -4,3 +4,4 @@ pandas
 openpyxl
 gunicorn  # Required for Render
 requests
+matplotlib
