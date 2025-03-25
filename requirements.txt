@@ -1,0 +1,7 @@
+Flask
+selenium
+pandas
+concurrent.futures
+openpyxl
+gunicorn  # Required for Render
+requests
