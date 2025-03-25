@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roll Number Form</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #cbdeeb; /* Pale blue background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #000000;
+        }
+
+        .container {
+            background: #ffffff; /* White background for the form */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 500px; /* Increased width to accommodate checkboxes */
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555555;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #f9f9f9;
+            color: #333333;
+        }
+
+        select:focus, input:focus, button:focus {
+            outline: none;
+            border-color: #bdcfdd;
+            box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
+        }
+
+        button {
+            background: #1889e6;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #42a5f5;
+        }
+
+        #singleRollNo, #rangeRollNo {
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .range-container {
+            margin-top: 10px;
+        }
+
+        #addButton {
+            background: #28a745;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        #addButton:hover {
+            background: #218838;
+        }
+
+        .checkbox-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="http://localhost:8000/images/Logo_Anurag_University.svg.png" alt="Anurag University Logo">
+        </div>
+        <form action="/submit" method="POST">
+            <h1>Enter Roll Numbers</h1>
+
+            <label for="choice">Choose Roll Number Type:</label>
+            <select name="choice" id="choice" required>
+                <option value="" disabled selected>Select Roll Number Type</option>
+                <option value="single">Single Roll Number</option>
+                <option value="range">Roll Number Range</option>
+            </select>
+
+            <label for="filename">File Name:</label>
+            <input type="text" name="filename" id="filename" placeholder="Enter file name" required>
+
+            <div id="singleRollNo">
+                <label for="single">Enter Single Roll Number:</label>
+                <input type="text" name="single" id="single" placeholder="Enter single roll number">
+            </div>
+
+            <div id="rangeRollNo">
+                <label for="from">From Roll Number:</label>
+                <input type="text" name="from" id="from" placeholder="From roll number">
+
+                <label for="to">To Roll Number:</label>
+                <input type="text" name="to" id="to" placeholder="To roll number">
+            </div>
+
+            <div id="additional"></div>
+            <button type="button" id="addButton">+</button>
+
+            <!-- Checkboxes for column selection -->
+            <div class="checkbox-group">
+                <h3>Select Columns for Output Excel:</h3>
+                <label><input type="checkbox" name="columns" value="Hall Ticket Number" checked> Hall Ticket Number</label>
+                <label><input type="checkbox" name="columns" value="Student Name" checked> Student Name</label>
+                <label><input type="checkbox" name="columns" value="Program" checked> Program</label>
+                <label><input type="checkbox" name="columns" value="Branch" checked> Branch</label>
+                <label><input type="checkbox" name="columns" value="Section" checked> Section</label>
+                <label><input type="checkbox" name="columns" value="CGPA" checked> CGPA</label>
+                <label><input type="checkbox" name="columns" value="No of backlogs" checked> No of Backlogs</label>
+                <label><input type="checkbox" name="columns" value="Sem1 Details"> Sem1 Details</label>
+                <label><input type="checkbox" name="columns" value="Sem2 Details"> Sem2 Details</label>
+                <label><input type="checkbox" name="columns" value="Sem3 Details"> Sem3 Details</label>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript to toggle visibility of input fields based on dropdown selection
+        document.getElementById("choice").addEventListener("change", function() {
+            var choice = this.value;
+            if (choice === "single") {
+                document.getElementById("singleRollNo").style.display = "block";
+                document.getElementById("rangeRollNo").style.display = "none";
+                document.getElementById("addButton").addEventListener("click", function() {
+                    var container = document.getElementById("additional");
+                    var newRange = document.createElement("div");
+                    newRange.classList.add("range-container");
+                    newRange.innerHTML = `
+                    <label for="other">Another Roll Number:</label>
+                    <input type="text" name="other" placeholder="Another roll number">
+                    `;
+                    container.appendChild(newRange);
+                });
+            } else if (choice === "range") {
+                document.getElementById("singleRollNo").style.display = "none";
+                document.getElementById("rangeRollNo").style.display = "block";
+                document.getElementById("addButton").addEventListener("click", function() {
+                    var container = document.getElementById("additional");
+                    var newRange = document.createElement("div");
+                    newRange.classList.add("range-container");
+                    newRange.innerHTML = `
+                        <label for="from">From Roll Number:</label>
+                        <input type="text" name="from" placeholder="From roll number">
+
+                        <label for="to">To Roll Number:</label>
+                        <input type="text" name="to" placeholder="To roll number">
+                    `;
+                    container.appendChild(newRange);
+                });
+            } else {
+                document.getElementById("singleRollNo").style.display = "none";
+                document.getElementById("rangeRollNo").style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
