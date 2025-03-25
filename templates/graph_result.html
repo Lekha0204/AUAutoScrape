@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e3f2fd; /* Pale blue background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff; /* White background for the form */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 600px;
+        }
+
+        h2 {
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555555;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
+        }
+
+        button {
+            background: #64b5f6;
+            color: #ffffff;
+            font-weight: bold;
+            border: none;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #42a5f5;
+        }
+
+        .btn-secondary {
+            margin-top: 10px;
+            background: #909da3;
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background: #90a4ae;
+        }
+
+        img {
+            border: 2px solid #cccccc;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h2>Generated Graph</h2>
+        <form action="/analyze/graph" method="POST">
+            <div class="mb-3">
+                <label for="subject" class="form-label">Select Subject:</label>
+                <select name="subject" id="subject" class="form-select">
+                    {% for subject in subjects %}
+                        <option value="{{ subject }}" {% if subject == selected_course %}selected{% endif %}>{{ subject }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="graphType" class="form-label">Select Graph Type:</label>
+                <select name="graphType" id="graphType" class="form-select">
+                    <option value="bar" {% if graph_type == "bar" %}selected{% endif %}>Bar</option>
+                    <option value="pie" {% if graph_type == "pie" %}selected{% endif %}>Pie</option>
+                    <option value="line" {% if graph_type == "line" %}selected{% endif %}>Line</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Graph</button>
+        </form>
+        {% if graph_url %}
+        <div class="mt-4">
+            <img src="{{ graph_url }}" alt="Graph" class="img-fluid">
+        </div>
+        {% endif %}
+        <div class="mt-3">
+            <a href="/analyze" class="btn btn-secondary">Back to Analysis</a>
+        </div>
+    </div>
+</body>
+</html>

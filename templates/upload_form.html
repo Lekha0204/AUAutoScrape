@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #e3f2fd; /* Pale blue background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #000000;
+        }
+
+        .container {
+            background: #ffffff; /* White background for the form */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #f9f9f9;
+            color: #333333;
+        }
+
+        input:focus, button:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
+        }
+
+        button {
+            background: #3ea2f5;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1081df;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Excel File</h1>
+        <form action="/analyze" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>

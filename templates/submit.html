@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraping Results</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #e3f2fd; /* Pale blue background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #000000;
+        }
+
+        .container {
+            background: #ffffff; /* White background for the form */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        .message {
+            font-size: 18px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        a {
+            display: inline-block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #f9f9f9;
+            color: #333333;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        a:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
+        }
+
+        a:hover {
+            background: #1081df;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Operation Completed</h2>
+        <p class="message">
+            Scraping completed and content is saved in <strong>{{ file }}</strong>.
+        </p>
+        <div class="btn-container">
+            <a href="/" class="btn btn-primary">Go Back to Form</a>
+        </div>
+        <div class="btn-container">
+            <a href="/analyze?file={{ file }}" class="btn btn-primary">Analyze Results</a>
+        </div>
+    </div>
+</body>
+</html>
