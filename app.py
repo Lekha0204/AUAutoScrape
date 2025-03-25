@@ -119,7 +119,7 @@ def run_parallel_scraping(all_roll_numbers, driver_path, max_threads=5):
 
 @app.route('/')
 def index():
-    return render_template('form1.html')
+    return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
