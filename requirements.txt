@@ -1,25 +1,25 @@
 # Core web framework
-flask==2.3.3
-flask-sqlalchemy==3.0.5
-werkzeug==2.3.7
-gunicorn==21.2.0
+flask==2.3.2          # Stable for Py 3.11 (avoid 3.x for now)
+flask-sqlalchemy==3.0.5  # Compatible with Flask 2.3.x
+werkzeug==2.3.7       # Matches Flask 2.3.x
+gunicorn==21.2.0      # Works well with Py 3.11
 
 # Web scraping and automation
-selenium==4.15.2
-webdriver-manager==4.0.1
-trafilatura==1.6.3
+selenium==4.15.2      # Stable for Py 3.11
+webdriver-manager==4.0.1  # Works with Selenium 4.x
+trafilatura==1.6.3    # Stable for Py 3.11
 
 # Data processing
-pandas==2.2.3     #  Upgraded for Python 3.13 compatibility
-numpy==1.26.4       #  Newer numpy for compatibility
-scipy==1.13.1       #  Compatible with numpy and Python 3.13
-openpyxl==3.1.2
-xlsxwriter==3.1.9
+pandas==2.1.4         # Stable for Py 3.11 (avoid 2.2.x if issues arise)
+numpy==1.26.4         # Latest stable for Py 3.11
+scipy==1.11.4         # Stable for Py 3.11
+openpyxl==3.1.2       # Stable for Py 3.11
+xlsxwriter==3.1.9     # Stable for Py 3.11
 
 # Data visualization
-matplotlib==3.8.4   #  For Python 3.13 compatibility
-seaborn==0.13.2     #  Compatible with latest matplotlib
+matplotlib==3.8.2     # Stable for Py 3.11
+seaborn==0.13.1       # Compatible with Matplotlib 3.8.x
 
 # Utilities
-email-validator==2.0.0
-psycopg2-binary==2.9.7
+email-validator==2.0.0  # Stable for Py 3.11
+psycopg2-binary==2.9.9  # Latest stable for Py 3.11
