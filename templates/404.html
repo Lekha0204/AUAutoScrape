@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - Student Result Analysis System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="error-state">
+            <i class="fas fa-search text-muted"></i>
+            <h1 class="display-1 text-muted">404</h1>
+            <h2 class="mb-3">Page Not Found</h2>
+            <p class="text-muted mb-4">
+                The page you're looking for doesn't exist or has been moved.
+            </p>
+            
+            <div class="d-grid gap-2 d-md-block">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="fas fa-home me-1"></i>
+                    Go to Dashboard
+                </a>
+                <button class="btn btn-outline-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Go Back
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Helpful Links -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-compass me-2"></i>
+                    Where would you like to go?
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-primary-subtle rounded">
+                            <i class="fas fa-download fa-2x text-primary me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Scrape Student Results</h6>
+                                <p class="mb-0 text-muted small">Extract fresh data from university portal</p>
+                                <a href="{{ url_for('index') }}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-success-subtle rounded">
+                            <i class="fas fa-chart-bar fa-2x text-success me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Analyze Data</h6>
+                                <p class="mb-0 text-muted small">Upload and analyze existing result files</p>
+                                <a href="{{ url_for('analyze_data') }}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Common Issues -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-question-circle me-2"></i>
+                    Common Issues
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h6><i class="fas fa-link text-warning me-1"></i>Broken Links</h6>
+                        <p class="text-muted small">
+                            If you clicked a link that brought you here, please report it to the administrator.
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6><i class="fas fa-clock text-info me-1"></i>Session Expired</h6>
+                        <p class="text-muted small">
+                            Your session may have expired. Try refreshing the page or starting a new session.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add ripple effect to cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Auto-redirect after 30 seconds (optional)
+    setTimeout(() => {
+        const autoRedirect = confirm('Would you like to be redirected to the dashboard?');
+        if (autoRedirect) {
+            window.location.href = '{{ url_for("index") }}';
+        }
+    }, 30000);
+});
+</script>
+{% endblock %}
+

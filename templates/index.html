@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Student Result Analysis System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Hero Section -->
+    <div class="col-12 mb-5">
+        <div class="text-center">
+            <h1 class="display-4 mb-3">
+                <i class="fas fa-graduation-cap text-primary me-3"></i>
+                Student Result Analysis System
+            </h1>
+            <p class="lead text-muted">
+                Scrape, analyze, and visualize student academic performance data with advanced statistical insights
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <!-- Scrape Results Card -->
+    <div class="col-lg-8">
+        <div class="card h-100 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-download me-2"></i>
+                    Scrape Student Results
+                </h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Extract student result data from the university portal. Support for single roll numbers or ranges.
+                </p>
+                
+                <form method="POST" action="{{ url_for('scrape_results') }}" id="scrapeForm">
+                    <!-- Choice Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Input Method</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="choice" id="single" value="single" checked>
+                            <label class="form-check-label" for="single">
+                                <i class="fas fa-user me-1"></i>Single Roll Number
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="choice" id="range" value="range">
+                            <label class="form-check-label" for="range">
+                                <i class="fas fa-users me-1"></i>Roll Number Range
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Single Roll Number Input -->
+                    <div id="singleInput" class="input-group">
+                        <div class="mb-3">
+                            <label for="singleRollNo" class="form-label">Roll Number</label>
+                            <input type="text" class="form-control" id="singleRollNo" name="single" 
+                                   placeholder="e.g., 23EG106D01" maxlength="20">
+                            <div class="form-text">Enter the complete roll number</div>
+                        </div>
+                    </div>
+
+                    <!-- Range Input -->
+                    <div id="rangeInput" class="input-group" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fromRollNo" class="form-label">From Roll Number</label>
+                                <input type="text" class="form-control" id="fromRollNo" name="from" 
+                                       placeholder="e.g., 23EG106D01" maxlength="20">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="toRollNo" class="form-label">To Roll Number</label>
+                                <input type="text" class="form-control" id="toRollNo" name="to" 
+                                       placeholder="e.g., 23EG106D66" maxlength="20">
+                            </div>
+                        </div>
+                        <div class="form-text">Range will include all roll numbers between From and To</div>
+                    </div>
+
+                    <!-- Column Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Columns to Include in Excel</label>
+                        <div class="column-selector">
+                            <div class="column-controls">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAllColumns()">
+                                    <i class="fas fa-check-square me-1"></i>Select All
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="selectNoneColumns()">
+                                    <i class="fas fa-square me-1"></i>Select None
+                                </button>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Hall Ticket Number" id="col_hall_ticket" checked>
+                                            <label class="form-check-label" for="col_hall_ticket">Hall Ticket Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Student Name" id="col_student_name" checked>
+                                            <label class="form-check-label" for="col_student_name">Student Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Program" id="col_program" checked>
+                                            <label class="form-check-label" for="col_program">Program</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Branch" id="col_branch" checked>
+                                            <label class="form-check-label" for="col_branch">Branch</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Section" id="col_section" checked>
+                                            <label class="form-check-label" for="col_section">Section</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="CGPA" id="col_cgpa" checked>
+                                            <label class="form-check-label" for="col_cgpa">CGPA</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Sem1 Details" id="col_sem1_sgpa">
+                                            <label class="form-check-label" for="col_sem1_sgpa">Sem1 Details</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Sem2 Details" id="col_sem2_sgpa">
+                                            <label class="form-check-label" for="col_sem2_sgpa">Sem2 Details</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Sem3 Details" id="col_sem3_sgpa">
+                                            <label class="form-check-label" for="col_sem3_sgpa">Sem3 Details</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="Sem4 Details" id="col_sem4_sgpa">
+                                            <label class="form-check-label" for="col_sem4_sgpa">Sem4 Details</label>
+                                        </div>
+                                    </div>
+                                    <div class="column-item">
+                                        <div class="form-check">
+                                            <input class="form-check-input column-checkbox" type="checkbox" name="columns" value="No of Backlogs" id="col_backlogs" checked>
+                                            <label class="form-check-label" for="col_backlogs">No of Backlogs</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filename Input -->
+                    <div class="mb-3">
+                        <label for="filename" class="form-label">Output Filename</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="filename" name="filename" 
+                                   value="student_results" placeholder="student_results">
+                            <span class="input-group-text">.xlsx</span>
+                        </div>
+                        <div class="form-text">Results will be saved as an Excel file</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-lg w-100" id="scrapeBtn">
+                        <i class="fas fa-play me-2"></i>
+                        Start Scraping
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analyze Data Card
+    <div class="col-lg-6">
+        <div class="card h-100 border-success">
+            <div class="card-header bg-success text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Analyze Existing Data
+                </h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Upload and analyze existing student result data with comprehensive statistical insights and visualizations.
+                </p>
+                
+                <form method="POST" action="{{ url_for('analyze_data') }}" enctype="multipart/form-data" id="analyzeForm">
+                    <div class="mb-3">
+                        <label for="dataFile" class="form-label">Upload Data File</label>
+                        <input type="file" class="form-control" id="dataFile" name="file" 
+                               accept=".xlsx,.xls,.csv" required>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Supported formats: Excel (.xlsx, .xls) and CSV (.csv)
+                        </div>
+                    </div>
+
+                    <!-- Analysis Options -->
+                   <!-- <div class="mb-3">
+                        <label class="form-label">Analysis Features</label>
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <i class="fas fa-chart-bar text-success me-2"></i>
+                                Statistical Analysis (Mean, Median, Mode)
+                            </div>
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <i class="fas fa-chart-pie text-info me-2"></i>
+                                Grade Distribution Analysis
+                            </div>
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <i class="fas fa-chart-area text-warning me-2"></i>
+                                Performance Trends
+                            </div>
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <i class="fas fa-file-excel text-primary me-2"></i>
+                                Enhanced Excel Reports
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100" id="analyzeBtn">
+                        <i class="fas fa-upload me-2"></i>
+                        Upload & Analyze
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<!-- Feature Overview -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-star text-warning me-2"></i>
+            Key Features
+        </h2>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Automated Scraping</h5>
+                <p class="card-text">Multi-threaded web scraping with progress tracking</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-calculator fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Advanced Analytics</h5>
+                <p class="card-text">Comprehensive statistical analysis and insights</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Data Visualization</h5>
+                <p class="card-text">Interactive charts and performance dashboards</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-file-export fa-3x text-warning mb-3"></i>
+                <h5 class="card-title">Export Options</h5>
+                <p class="card-text">Professional Excel reports with enhanced formatting</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle choice selection
+    const singleRadio = document.getElementById('single');
+    const rangeRadio = document.getElementById('range');
+    const singleInput = document.getElementById('singleInput');
+    const rangeInput = document.getElementById('rangeInput');
+
+    function toggleInputs() {
+        if (singleRadio.checked) {
+            singleInput.style.display = 'block';
+            rangeInput.style.display = 'none';
+            document.getElementById('singleRollNo').required = true;
+            document.getElementById('fromRollNo').required = false;
+            document.getElementById('toRollNo').required = false;
+        } else {
+            singleInput.style.display = 'none';
+            rangeInput.style.display = 'block';
+            document.getElementById('singleRollNo').required = false;
+            document.getElementById('fromRollNo').required = true;
+            document.getElementById('toRollNo').required = true;
+        }
+    }
+
+    //  Make globally accessible for onclick use
+    window.selectAllColumns = function() {
+        document.querySelectorAll('.column-checkbox').forEach(cb => cb.checked = true);
+    };
+
+    window.selectNoneColumns = function() {
+        document.querySelectorAll('.column-checkbox').forEach(cb => cb.checked = false);
+    };
+
+    singleRadio.addEventListener('change', toggleInputs);
+    rangeRadio.addEventListener('change', toggleInputs);
+
+    // Form validation for scrape
+    document.getElementById('scrapeForm').addEventListener('submit', function(e) {
+        const btn = document.getElementById('scrapeBtn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Starting...';
+        btn.disabled = true;
+    });
+
+    // Form validation for analyze
+    document.getElementById('analyzeForm').addEventListener('submit', function(e) {
+        const btn = document.getElementById('analyzeBtn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
+        btn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

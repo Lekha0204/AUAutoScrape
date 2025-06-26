@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if page_type == 'scraping' %}Scraping Progress{% else %}Analysis Results{% endif %} - Student Result Analysis System
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center">
+            <h1 class="mb-0">
+                {% if page_type == 'scraping' %}
+                <i class="fas fa-download text-primary me-3"></i>Scraping Progress
+                {% else %}
+                <i class="fas fa-chart-bar text-success me-3"></i>Analysis Results
+                {% endif %}
+            </h1>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary ms-auto">
+                <i class="fas fa-home me-1"></i>Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if page_type == 'scraping' %}
+<!-- Scraping Progress Section -->
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div id="statusIcon" class="mb-3">
+                        <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+                    </div>
+                    <h4 id="statusText">Initializing scraping process...</h4>
+                    <p class="text-muted" id="statusDetail">Please wait while we process your request.</p>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="mb-4" id="progressSection" style="display: none;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Progress</span>
+                        <span id="progressText">0 / 0</span>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Download Section -->
+                <div id="downloadSection" style="display: none;" class="text-center">
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Scraping completed successfully!
+                    </div>
+                    <a href="#" id="downloadLink" class="btn btn-success btn-lg">
+                        <i class="fas fa-download me-2"></i>
+                        Download Results
+                    </a>
+                </div>
+                
+                <!-- Error Section -->
+                <div id="errorSection" style="display: none;">
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Error occurred:</strong>
+                        <span id="errorMessage"></span>
+                    </div>
+                    <div class="text-center">
+                        <a href="{{ url_for('index') }}" class="btn btn-primary">
+                            <i class="fas fa-redo me-1"></i>Try Again
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Analysis Results Section -->
+<div class="row" id="analysisContent" style="display: none;">
+    <!-- Summary Statistics -->
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Summary Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row" id="summaryStats">
+                    <!-- Stats will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts Section -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Grade Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="gradeChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Performance Trends
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="trendChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Branch Comparison -->
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-users me-2"></i>Branch-wise Performance
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="branchChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detailed Statistics Table -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-table me-2"></i>Detailed Analysis
+                </h5>
+                <button class="btn btn-primary btn-sm" id="exportBtn">
+                    <i class="fas fa-file-excel me-1"></i>Export Report
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="detailsTable">
+                        <!-- Table will be populated by JavaScript -->
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Section for Analysis -->
+<div class="row" id="analysisLoading">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body text-center">
+                <div id="analysisStatusIcon" class="mb-3">
+                    <i class="fas fa-spinner fa-spin fa-3x text-success"></i>
+                </div>
+                <h4 id="analysisStatusText">Analyzing your data...</h4>
+                <p class="text-muted" id="analysisStatusDetail">This may take a few moments depending on file size.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analysis Error Section -->
+<div id="analysisErrorSection" style="display: none;">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="alert alert-danger text-center" role="alert">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                    <h4>Analysis Failed</h4>
+                    <p id="analysisErrorMessage"></p>
+                    <a href="{{ url_for('analyze_data') }}" class="btn btn-primary">
+                        <i class="fas fa-redo me-1"></i>Try Again
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sessionId = '{{ session_id }}';
+    const pageType = '{{ page_type }}';
+    
+    if (pageType === 'scraping') {
+        checkScrapingStatus();
+    } else {
+        checkAnalysisStatus();
+    }
+    
+    function checkScrapingStatus() {
+        fetch(`/api/scraping-status/${sessionId}`)
+            .then(response => response.json())
+            .then(data => {
+                updateScrapingUI(data);
+                if (data.status === 'scraping' || data.status === 'starting' || data.status === 'saving') {
+                    setTimeout(checkScrapingStatus, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking status:', error);
+                showError('Failed to check scraping status');
+            });
+    }
+    
+    function checkAnalysisStatus() {
+        fetch(`/api/analysis-status/${sessionId}`)
+            .then(response => response.json())
+            .then(data => {
+                updateAnalysisUI(data);
+                if (data.status === 'analyzing' || data.status === 'starting') {
+                    setTimeout(checkAnalysisStatus, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking analysis status:', error);
+                showAnalysisError('Failed to check analysis status');
+            });
+    }
+    
+    function updateScrapingUI(data) {
+        const statusIcon = document.getElementById('statusIcon');
+        const statusText = document.getElementById('statusText');
+        const statusDetail = document.getElementById('statusDetail');
+        const progressSection = document.getElementById('progressSection');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const downloadSection = document.getElementById('downloadSection');
+        const errorSection = document.getElementById('errorSection');
+        
+        switch(data.status) {
+            case 'starting':
+                statusIcon.innerHTML = '<i class="fas fa-play fa-3x text-primary"></i>';
+                statusText.textContent = 'Starting scraping process...';
+                statusDetail.textContent = 'Initializing web scraper and preparing to fetch data.';
+                break;
+                
+            case 'scraping':
+                statusIcon.innerHTML = '<i class="fas fa-download fa-3x text-primary"></i>';
+                statusText.textContent = 'Scraping in progress...';
+                statusDetail.textContent = 'Fetching student result data from the university portal.';
+                progressSection.style.display = 'block';
+                
+                const percentage = data.total > 0 ? (data.completed / data.total) * 100 : 0;
+                progressBar.style.width = percentage + '%';
+                progressText.textContent = `${data.completed} / ${data.total}`;
+                break;
+                
+            case 'saving':
+                statusIcon.innerHTML = '<i class="fas fa-save fa-3x text-warning"></i>';
+                statusText.textContent = 'Saving results...';
+                statusDetail.textContent = 'Processing and saving scraped data to Excel file.';
+                progressSection.style.display = 'block';
+                progressBar.style.width = '100%';
+                progressText.textContent = `${data.total} / ${data.total}`;
+                break;
+                
+            case 'completed':
+                statusIcon.innerHTML = '<i class="fas fa-check-circle fa-3x text-success"></i>';
+                statusText.textContent = 'Scraping completed!';
+                statusDetail.textContent = 'All student data has been successfully scraped and saved.';
+                progressSection.style.display = 'none';
+                downloadSection.style.display = 'block';
+                
+                const downloadLink = document.getElementById('downloadLink');
+                downloadLink.href = `/download/${data.filename}`;
+                break;
+                
+            case 'error':
+                showError(data.error || 'Unknown error occurred');
+                break;
+        }
+    }
+    
+    function updateAnalysisUI(data) {
+        const analysisLoading = document.getElementById('analysisLoading');
+        const analysisContent = document.getElementById('analysisContent');
+        const analysisErrorSection = document.getElementById('analysisErrorSection');
+        
+        switch(data.status) {
+            case 'starting':
+                document.getElementById('analysisStatusText').textContent = 'Starting analysis...';
+                document.getElementById('analysisStatusDetail').textContent = 'Preparing to analyze your data file.';
+                break;
+                
+            case 'analyzing':
+                document.getElementById('analysisStatusText').textContent = 'Analyzing data...';
+                document.getElementById('analysisStatusDetail').textContent = 'Performing comprehensive statistical analysis.';
+                break;
+                
+            case 'completed':
+                analysisLoading.style.display = 'none';
+                analysisContent.style.display = 'block';
+                displayAnalysisResults(data.results);
+                break;
+                
+            case 'error':
+                showAnalysisError(data.error || 'Unknown error occurred');
+                break;
+        }
+    }
+    
+    function displayAnalysisResults(results) {
+        // Populate summary statistics
+        const summaryStats = document.getElementById('summaryStats');
+        summaryStats.innerHTML = `
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-primary">${results.total_students || 0}</h3>
+                    <p class="text-muted">Total Students</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-success">${results.average_cgpa || 'N/A'}</h3>
+                    <p class="text-muted">Average CGPA</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-info">${results.total_branches || 0}</h3>
+                    <p class="text-muted">Branches</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-warning">${results.pass_percentage || 'N/A'}%</h3>
+                    <p class="text-muted">Pass Rate</p>
+                </div>
+            </div>
+        `;
+        
+        // Initialize charts
+        if (results.charts) {
+            initializeCharts(results.charts);
+        }
+        
+        // Populate details table
+        if (results.detailed_stats) {
+            populateDetailsTable(results.detailed_stats);
+        }
+    }
+    
+    function showError(message) {
+        document.getElementById('statusIcon').innerHTML = '<i class="fas fa-exclamation-triangle fa-3x text-danger"></i>';
+        document.getElementById('statusText').textContent = 'Scraping Failed';
+        document.getElementById('statusDetail').textContent = '';
+        document.getElementById('progressSection').style.display = 'none';
+        document.getElementById('errorSection').style.display = 'block';
+        document.getElementById('errorMessage').textContent = message;
+    }
+    
+    function showAnalysisError(message) {
+        document.getElementById('analysisLoading').style.display = 'none';
+        document.getElementById('analysisErrorSection').style.display = 'block';
+        document.getElementById('analysisErrorMessage').textContent = message;
+    }
+});
+</script>
+{% endblock %}

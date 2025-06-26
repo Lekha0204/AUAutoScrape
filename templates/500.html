@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - Student Result Analysis System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="error-state">
+            <i class="fas fa-exclamation-triangle text-danger"></i>
+            <h1 class="display-1 text-danger">500</h1>
+            <h2 class="mb-3">Internal Server Error</h2>
+            <p class="text-muted mb-4">
+                Something went wrong on our end. We're working to fix this issue.
+            </p>
+            
+            <div class="d-grid gap-2 d-md-block">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="fas fa-home me-1"></i>
+                    Go to Dashboard
+                </a>
+                <button class="btn btn-outline-secondary" onclick="window.location.reload()">
+                    <i class="fas fa-redo me-1"></i>
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Details (if available) -->
+{% if error_details %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bug me-2"></i>
+                    Error Details
+                </h5>
+            </div>
+            <div class="card-body">
+                <pre class="text-danger"><code>{{ error_details }}</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- What to do next -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    What can you do?
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-redo-alt fa-3x text-primary mb-3"></i>
+                            <h6>Refresh the Page</h6>
+                            <p class="text-muted small">
+                                Sometimes a simple refresh can resolve temporary issues.
+                            </p>
+                            <button class="btn btn-outline-primary btn-sm" onclick="window.location.reload()">
+                                <i class="fas fa-redo me-1"></i>Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                            <h6>Wait a Moment</h6>
+                            <p class="text-muted small">
+                                The server might be experiencing high load. Please wait and try again.
+                            </p>
+                            <span class="badge bg-warning">Processing load...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-envelope fa-3x text-info mb-3"></i>
+                            <h6>Report the Issue</h6>
+                            <p class="text-muted small">
+                                If the problem persists, please contact the system administrator.
+                            </p>
+                            <button class="btn btn-outline-info btn-sm" onclick="reportError()">
+                                <i class="fas fa-bug me-1"></i>Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Status -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-server me-2"></i>
+                    System Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <i class="fas fa-database text-success fa-2x mb-2"></i>
+                            <h6>Database</h6>
+                            <span class="badge bg-success">Online</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <i class="fas fa-globe text-warning fa-2x mb-2"></i>
+                            <h6>Web Scraper</h6>
+                            <span class="badge bg-warning">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <i class="fas fa-chart-line text-success fa-2x mb-2"></i>
+                            <h6>Analytics</h6>
+                            <span class="badge bg-success">Available</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <i class="fas fa-file-export text-success fa-2x mb-2"></i>
+                            <h6>File Export</h6>
+                            <span class="badge bg-success">Working</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>
+                    Try These Alternatives
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('index') }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-home me-2"></i>Main Dashboard
+                            </h6>
+                            <small class="text-success">Available</small>
+                        </div>
+                        <p class="mb-1">Access the main dashboard and scraping features</p>
+                    </a>
+                    
+                    <a href="{{ url_for('analyze_data') }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-upload me-2"></i>Data Analysis
+                            </h6>
+                            <small class="text-success">Available</small>
+                        </div>
+                        <p class="mb-1">Upload and analyze existing data files</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Simulate system status checks
+    setTimeout(() => {
+        const webScraperStatus = document.querySelector('.col-md-3:nth-child(2) .badge');
+        if (webScraperStatus) {
+            webScraperStatus.className = 'badge bg-success';
+            webScraperStatus.textContent = 'Online';
+        }
+    }, 2000);
+    
+    // Auto-retry mechanism
+    let retryCount = 0;
+    const maxRetries = 3;
+    
+    window.autoRetry = function() {
+        if (retryCount < maxRetries) {
+            retryCount++;
+            console.log(`Auto-retry attempt ${retryCount}/${maxRetries}`);
+            
+            // Show retry notification
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-info alert-dismissible fade show position-fixed';
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alert.innerHTML = `
+                <i class="fas fa-info-circle me-2"></i>
+                Attempting to reconnect... (${retryCount}/${maxRetries})
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            // Try to reload after a delay
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        }
+    };
+    
+    // Error reporting function
+    window.reportError = function() {
+        const errorReport = {
+            timestamp: new Date().toISOString(),
+            url: window.location.href,
+            userAgent: navigator.userAgent,
+            error: '500 Internal Server Error'
+        };
+        
+        // In a real application, this would send the error to a logging service
+        console.log('Error Report:', errorReport);
+        
+        // Show confirmation
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+        alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alert.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            Error report submitted. Thank you for helping us improve!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(alert);
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
+    };
+    
+    // Heartbeat check every 30 seconds
+    setInterval(() => {
+        fetch('/api/health', { method: 'HEAD' })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Server is back online');
+                    // Optionally show a "server restored" message
+                }
+            })
+            .catch(() => {
+                console.log('Server still unavailable');
+            });
+    }, 30000);
+});
+</script>
+
+<style>
+.status-item {
+    padding: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.status-item:hover {
+    transform: translateY(-2px);
+}
+
+.error-state i:first-child {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.list-group-item:hover {
+    background-color: var(--bs-tertiary-bg);
+}
+</style>
+{% endblock %}
+

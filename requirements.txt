@@ -1,0 +1,16 @@
+flask==2.3.3
+pandas==2.1.1
+selenium==4.15.2
+webdriver-manager==4.0.1
+xlsxwriter==3.1.9
+matplotlib==3.7.2
+seaborn==0.12.2
+numpy==1.24.3
+scipy==1.11.3
+openpyxl==3.1.2
+trafilatura==1.6.3
+email-validator==2.0.0
+flask-sqlalchemy==3.0.5
+psycopg2-binary==2.9.7
+gunicorn==21.2.0
+werkzeug==2.3.7
