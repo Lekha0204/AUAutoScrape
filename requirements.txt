@@ -10,9 +10,9 @@ webdriver-manager==4.0.1  # Works with Selenium 4.x
 trafilatura==1.6.3    # Stable for Py 3.11
 
 # Data processing
-pandas==2.1.4         # Stable for Py 3.11 (avoid 2.2.x if issues arise)
-numpy==1.26.4         # Latest stable for Py 3.11
-scipy==1.11.4         # Stable for Py 3.11
+pandas==2.2.2
+numpy==1.26.4
+scipy==1.11.4     # Stable for Py 3.11
 openpyxl==3.1.2       # Stable for Py 3.11
 xlsxwriter==3.1.9     # Stable for Py 3.11
 
