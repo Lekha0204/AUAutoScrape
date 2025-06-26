@@ -1,16 +1,25 @@
+# Core web framework
 flask==2.3.3
-pandas==2.1.1
+flask-sqlalchemy==3.0.5
+werkzeug==2.3.7
+gunicorn==21.2.0
+
+# Web scraping and automation
 selenium==4.15.2
 webdriver-manager==4.0.1
-xlsxwriter==3.1.9
-matplotlib==3.7.2
-seaborn==0.12.2
-numpy==1.24.3
-scipy==1.11.3
-openpyxl==3.1.2
 trafilatura==1.6.3
+
+# Data processing
+pandas==2.2.2       #  Upgraded for Python 3.13 compatibility
+numpy==1.26.4       #  Newer numpy for compatibility
+scipy==1.13.1       #  Compatible with numpy and Python 3.13
+openpyxl==3.1.2
+xlsxwriter==3.1.9
+
+# Data visualization
+matplotlib==3.8.4   #  For Python 3.13 compatibility
+seaborn==0.13.2     #  Compatible with latest matplotlib
+
+# Utilities
 email-validator==2.0.0
-flask-sqlalchemy==3.0.5
 psycopg2-binary==2.9.7
-gunicorn==21.2.0
-werkzeug==2.3.7
