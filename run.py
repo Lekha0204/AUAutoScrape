@@ -20,14 +20,14 @@ os.environ.setdefault('FLASK_DEBUG', '1')
 # Import and run the Flask app
 from app import app
 
-if __name__ == '__main__':
-    print("Starting Student Result Analysis System...")
-    print("Open your browser and go to: http://localhost:5000")
-    print("Press Ctrl+C to stop the server")
+# if __name__ == '__main__':
+#     print("Starting Student Result Analysis System...")
+#     print("Open your browser and go to: http://localhost:5000")
+#     print("Press Ctrl+C to stop the server")
     
-    app.run(
-        host='0.0.0.0',
-        port=5000,
-        debug=True,
-        threaded=True
-    )
+#     app.run(
+#         host='0.0.0.0',
+#         port=5000,
+#         debug=True,
+#         threaded=True
+#     )
