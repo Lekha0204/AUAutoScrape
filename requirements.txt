@@ -36,6 +36,8 @@ certifi==2025.4.26
 charset-normalizer==3.4.2
 idna==3.10
 PySocks==1.7.1
+gunicorn==21.2.0
+
 
 # Optional low-level support
 cffi==1.17.1
