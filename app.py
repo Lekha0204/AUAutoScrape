@@ -9,12 +9,15 @@ from werkzeug.utils import secure_filename
 from scraper import StudentResultScraper
 from data_analyzer import DataAnalyzer
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
 # Flask app initialization
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "jhrguwe2gr289rhhevfqehfvqfh")
+app.secret_key = os.environ["SESSION_SECRET"]
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
